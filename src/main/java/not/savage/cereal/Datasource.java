@@ -1,9 +1,9 @@
 package not.savage.cereal;
 
 import lombok.NonNull;
-import not.savage.cereal.impl.sort.CerealFilterMode;
-import not.savage.cereal.impl.sort.CerealSortMode;
-import not.savage.cereal.impl.exception.DatasourceException;
+import not.savage.cereal.exception.DatasourceException;
+import not.savage.cereal.sort.CerealFilterMode;
+import not.savage.cereal.sort.CerealSortMode;
 
 import java.util.Optional;
 import java.util.Set;

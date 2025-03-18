@@ -34,7 +34,7 @@ public class Guild extends CerealDataObject {
 Next, we need a cache to store our objects. The cache acts as our single point of access to get or create objects. The cache extends `CerealObjectCache<Guild>` and implements the required methods.
 All caches also require a `@Location` annotation to specify the file location if using flat-file persistence. As this is designed for an unknown end-user, all caches need to be ready for any backend to be used.
 ```java
-@Location("guilds.json") // File location if set to use flat-file persistence.
+@FileLocation("guilds.json") // File location if set to use flat-file persistence.
 @Serializers({
         LocationSerializer.class // Custom Serializer
 })
@@ -57,9 +57,9 @@ public class Guilds extends CerealObjectCache<Guild> {
 Once we get to the point of our loading function we need to check if Cereal has been initialized, if we're not alone in this environment, or initialize. We require a `File` which Cereal treats as the working directory. After Cereal is confirmed alive, we need to instantiate our cache.
 ```java
 // Depending on implementation, find or create the API instance.
-final File cerealWorkingDirectory = new File("datastore");
-if (!CerealAPI.isInitialized(cerealWorkingDirectory)) {
-    new CerealAPI();
+if (!CerealAPI.isInitialized()) {
+    final File cerealWorkingDirectory = new File("datastore");
+    new CerealAPI(cerealWorkingDirectory);
 }
 
 // Install our Module
@@ -67,14 +67,17 @@ CerealAPI.install(GuildsCache.class);
 ```
 And once we've installed our cache into the API, we can now access it. This implementation uses a static instance, but it's not required, the `install` method returns the instantiated cache instance. Once objects are modified, you dont need to write them back to the cache, they will be automatically saved. Objects shouldn't be long-lived references. If you need to access an object, you should use the cache to get it, when you need it.
 ```java
-Guilds.getInstance().getIfCachedOrLoadAsync(uuid).thenAccept(guild -> {
-    // Do something with the guild.
+Guilds.getInstance().getAsync(uuid).thenAccept(guild -> {
+    guild.ifPresent(g -> {
+        // Guild found with this id!    
+    });
 });
 
+// Lookup by a given field name, and matching value.
 String newGuildName = "new-name";
 Guilds.getInstance().getByFieldAsync("guildName", "my-guild").thenAccept(guild -> {
    guild.ifPresent(g -> {
-        guild.setName(newGuildName);
+        g.setName(newGuildName);
    }); 
 });
 ```

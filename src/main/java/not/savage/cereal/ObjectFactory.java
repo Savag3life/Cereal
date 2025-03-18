@@ -1,7 +1,7 @@
 package not.savage.cereal;
 
 import lombok.NonNull;
-import not.savage.cereal.impl.exception.InstantiationException;
+import not.savage.cereal.exception.InstantiationException;
 
 /**
  * Object factory for creating objects when they are first instantiated.

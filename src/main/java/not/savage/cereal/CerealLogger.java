@@ -1,6 +1,6 @@
 package not.savage.cereal;
 
-import not.savage.cereal.impl.exception.DataPersistenceException;
+import not.savage.cereal.exception.DataPersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
